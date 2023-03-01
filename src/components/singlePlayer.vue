@@ -1,54 +1,56 @@
 <template>
+  <choose-popup
+    @choose="userChoice = $event == 'first' ? 'X' : 'O'"
+    v-if="userChoice == ''"
+    firstValue="X"
+    secondValue="O"
+    header="Choose your letter !"
+  ></choose-popup>
   <section class="container">
-    <choose-popup
-      @choose="userChoice = $event == 'first' ? 'X' : 'O'"
-      v-if="userChoice == ''"
-      firstValue="X"
-      secondValue="O"
-    ></choose-popup>
     <div class="top-container">
       <div class="score-board">
         <div class="">
-          <span>{{ playerScore }}</span>
+          <strong>{{ playerScore }}</strong>
           You
         </div>
-        <hr />
+
         <div class="">
-          <span>{{ computerScore }}</span>
+          <strong>{{ computerScore }}</strong>
           Computer
         </div>
       </div>
-      <div class="status-container">
-        <h4>Your turn</h4>
-        <h6>Choosed {{ userChoice }}</h6>
-      </div>
-      <div v-if="gameIsOver">
-        <h2>{{ message }}</h2>
-        <h3>Game is Over</h3>
+      <div v-if="!gameIsOver" class="status-container">
+        <h4 :class="{ activeUser: !timeoutActive }">
+          {{ !timeoutActive ? "Your turn" : "Computer Turn" }}
+        </h4>
+        <strong>{{ !timeoutActive ? userChoice : computerChoice }}</strong>
       </div>
     </div>
     <div class="game">
+      <my-result
+        @refresh="refresh"
+        v-if="gameIsOver"
+        :message="message"
+      ></my-result>
       <div
         :class="{ gameOver: gameIsOver || timeoutActive }"
         :key="i"
         v-for="(area, i) in gameBoard"
         @click="handlePlay(i)"
-        class="area"
+        class="board-cell"
       >
         {{ area }}
       </div>
     </div>
-    <button @click="refresh()">
-      <img src="../assets/refresh-icon.png" alt="" />
-    </button>
   </section>
 </template>
 
 <script>
 import choosePopup from "./choosePopup.vue";
+import myResult from "./myResult.vue";
 export default {
   name: "App",
-  components: { choosePopup },
+  components: { choosePopup, myResult },
 
   data() {
     return {
@@ -93,7 +95,6 @@ export default {
           this.gameBoard[a] === this.gameBoard[b] &&
           this.gameBoard[b] === this.gameBoard[c]
         ) {
-          console.log(this.computerChoice);
           const winner =
             this.gameBoard[a] === this.computerChoice ? "Computer" : "You";
           this.displayWinner(winner);
@@ -146,5 +147,9 @@ export default {
   justify-content: space-between;
   height: max-content;
   align-items: center;
+  flex-direction: column;
+}
+.status-container strong {
+  font-size: x-large;
 }
 </style>

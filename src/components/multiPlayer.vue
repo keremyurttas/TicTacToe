@@ -2,43 +2,42 @@
   <section class="container">
     <div class="top-container">
       <div class="score-board">
-        <div class="">
-          <span>{{ playerXScore }}</span>
+        <div :class="{ activeUser: activeUser == 'X' }" class="">
+          <strong>{{ playerXScore }}</strong>
           Player X
         </div>
         <hr />
-        <div class="">
-          <span>{{ playerOScore }}</span>
+        <div :class="{ activeUser: activeUser == 'O' }" class="">
+          <strong>{{ playerOScore }}</strong>
           Player O
         </div>
       </div>
-      <h4>Active User : {{ activeUser }}</h4>
-      <div v-if="gameIsOver">
-        <h2>{{ message }}</h2>
-        <h3>Game is Over</h3>
-      </div>
     </div>
+
     <div class="game">
+      <my-result
+        @refresh="refresh"
+        v-if="gameIsOver"
+        :message="message"
+      ></my-result>
       <div
         :class="{ gameOver: gameIsOver }"
         :key="i"
         v-for="(area, i) in gameBoard"
         @click="handlePlay(i)"
-        class="area"
+        class="board-cell"
       >
         {{ area }}
       </div>
     </div>
-    <button @click="refresh()">
-      <img src="../assets/refresh-icon.png" alt="" />
-    </button>
   </section>
 </template>
 
 <script>
+import myResult from "./myResult.vue";
 export default {
   name: "App",
-
+  components: { myResult },
   data() {
     return {
       gameIsOver: false,
@@ -105,41 +104,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.game {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-.gameOver {
-  background-color: rgb(164, 162, 162);
-}
-.area {
-  border: 1px solid #000;
-  width: 70px;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: xx-large;
-  font-weight: 600;
-  cursor: pointer;
-}
-.score-board span {
-  display: block;
-}
-.score-board {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  height: max-content;
-}
-
-.top-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-</style>
