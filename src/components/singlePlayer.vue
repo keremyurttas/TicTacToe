@@ -6,7 +6,7 @@
     secondValue="O"
     header="Choose your letter !"
   ></choose-popup>
-  <section class="container">
+  <section v-if="userChoice" class="container">
     <div class="top-container">
       <div class="score-board">
         <div class="">

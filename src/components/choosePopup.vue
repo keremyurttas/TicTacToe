@@ -6,7 +6,7 @@ import { emit } from 'process';
     <div class="button-container">
       <button @click="$emit('choose', 'first')">{{ firstValue }}</button>
 
-      <button class="second-btn" @click="$emit('choose', 'second')">
+      <button @click="$emit('choose', 'second')">
         {{ secondValue }}
       </button>
     </div>
@@ -21,11 +21,11 @@ export default {
 .choose-popup {
   width: 50vw;
   background-color: rgb(118, 117, 118);
-  backdrop-filter: blur 2px;
+
   position: absolute;
   text-align: center;
   z-index: 10;
-  top: 10vh;
+  top: 5vh;
   padding: 2rem;
   border-radius: 20px;
 }

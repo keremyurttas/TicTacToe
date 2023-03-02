@@ -63,13 +63,12 @@ h1 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 5px;
-  position: relative;
 }
 
 .board-cell {
   border: 2px solid #000;
-  width: 70px;
-  height: 70px;
+  width: 5vw;
+  aspect-ratio: 1/1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -115,5 +114,22 @@ h1 {
   color: white;
   padding: 1rem 2rem;
   border-radius: 8px;
+}
+@media only screen and (max-width: 950px) {
+  .board-cell {
+    width: 15vw;
+  }
+  .top-container {
+    font-size: x-large;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .board-cell {
+    width: 20vw;
+    font-size: 3rem;
+  }
+  .top-container {
+    font-size: large;
+  }
 }
 </style>
