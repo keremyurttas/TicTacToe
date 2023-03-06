@@ -2,14 +2,16 @@
   <section class="container">
     <div class="top-container">
       <div class="score-board">
-        <div :class="{ activeUser: activeUser == 'X' }" class="">
+        <div :class="{ activeUser: activeUser == 'X' }" class="player-stats">
           <strong>{{ playerXScore }}</strong>
           Player X
+          <div v-if="activeUser == 'X'" class="X player-bar"></div>
         </div>
         <hr />
-        <div :class="{ activeUser: activeUser == 'O' }" class="">
+        <div :class="{ activeUser: activeUser == 'O' }" class="player-stats">
           <strong>{{ playerOScore }}</strong>
           Player O
+          <div v-if="activeUser == 'O'" class="O player-bar"></div>
         </div>
       </div>
     </div>
@@ -30,6 +32,7 @@
         {{ area }}
       </div>
     </div>
+    <button class="return" @click="$emit('refresh')">Return to menu</button>
   </section>
 </template>
 
@@ -68,15 +71,18 @@ export default {
         }
     },
     checkforWin() {
-      for (let i = 0; i < this.winningCombinations.length; i++) {
-        const [a, b, c] = this.winningCombinations[i];
+      const ls = this;
+      this.winningCombinations.map((combination) => test(combination));
+      function test(combination) {
+        const [a, b, c] = combination;
+        console.log(a, b, c);
         if (
-          this.gameBoard[a] &&
-          this.gameBoard[a] === this.gameBoard[b] &&
-          this.gameBoard[b] === this.gameBoard[c]
+          ls.gameBoard[a] &&
+          ls.gameBoard[a] === ls.gameBoard[b] &&
+          ls.gameBoard[b] === ls.gameBoard[c]
         ) {
-          this.displayWinner();
-          this.changeUser();
+          ls.displayWinner();
+          ls.changeUser();
 
           return;
         }
@@ -104,3 +110,13 @@ export default {
   },
 };
 </script>
+<style>
+.X {
+  right: 0;
+  position: absolute;
+}
+.O {
+  left: 0;
+  position: absolute;
+}
+</style>

@@ -24,6 +24,7 @@
           {{ !timeoutActive ? "Your turn" : "Computer Turn" }}
         </h4>
         <strong>{{ !timeoutActive ? userChoice : computerChoice }}</strong>
+        <div v-if="!timeoutActive" class="player-bar"></div>
       </div>
     </div>
     <div class="game">
@@ -42,6 +43,7 @@
         {{ area }}
       </div>
     </div>
+    <button class="return" @click="$emit('refresh')">Return to menu</button>
   </section>
 </template>
 
@@ -57,7 +59,6 @@ export default {
       gameIsOver: false,
       timeoutActive: false,
       userChoice: "",
-      computerChoice: "",
       gameBoard: ["", "", "", "", "", "", "", "", ""],
       winningCombinations: [
         [0, 1, 2],
@@ -81,6 +82,7 @@ export default {
           this.gameBoard[index] = this.userChoice;
           this.checkforWin();
           this.timeoutActive = true;
+
           setTimeout(() => {
             this.computerPlay();
             this.timeoutActive = false;
@@ -97,7 +99,7 @@ export default {
         ) {
           const winner =
             this.gameBoard[a] === this.computerChoice ? "Computer" : "You";
-          this.displayWinner(winner);
+          setTimeout(this.displayWinner, 500, winner);
 
           return;
         }
@@ -106,10 +108,10 @@ export default {
     },
     computerPlay() {
       if (!this.gameIsOver) {
-        let emptySquares = [];
-        this.gameBoard.filter((square, i) =>
-          square == "" ? emptySquares.push(i) : undefined
-        );
+        let emptySquares = this.gameBoard
+          .map((g, i) => (g === "" ? i : undefined))
+          .filter((i) => i !== undefined);
+
         let randomIndex =
           emptySquares[Math.floor(Math.random() * emptySquares.length)];
         this.gameBoard[randomIndex] = this.computerChoice;
@@ -118,7 +120,7 @@ export default {
     },
     displayWinner(winner) {
       this.gameIsOver = true;
-      this.message = winner + " Win the game";
+      this.message = winner + ` Win${winner == "You" ? "" : "s"} the game`;
       winner == "You" ? this.playerScore++ : this.computerScore++;
     },
     displayTie() {
@@ -132,10 +134,9 @@ export default {
       this.userChoice = "";
     },
   },
-
-  watch: {
-    userChoice() {
-      this.computerChoice = this.userChoice === "X" ? "O" : "X";
+  computed: {
+    computerChoice() {
+      return this.userChoice === "X" ? "O" : "X";
     },
   },
 };
@@ -148,6 +149,7 @@ export default {
   height: max-content;
   align-items: center;
   flex-direction: column;
+  position: relative;
 }
 .status-container strong {
   font-size: x-large;

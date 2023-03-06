@@ -2,50 +2,74 @@ import { emit } from 'process';
 
 <template>
   <div class="choose-popup">
-    <h3>{{ header }}</h3>
+    <h3 class="header">{{ header }}</h3>
     <div class="button-container">
-      <button @click="$emit('choose', 'first')">{{ firstValue }}</button>
+      <button
+        class="choose-button"
+        :class="{ 'no-image': !firstImage }"
+        @click="$emit('choose', 'first')"
+      >
+        <span>{{ firstValue }}</span>
+        <img
+          v-if="firstImage"
+          :src="require(`../assets/${firstImage}`)"
+          alt=""
+        />
+      </button>
 
-      <button @click="$emit('choose', 'second')">
-        {{ secondValue }}
+      <button
+        class="choose-button"
+        :class="{ 'no-image': !secondImage }"
+        @click="$emit('choose', 'second')"
+      >
+        <span>{{ secondValue }}</span>
+        <img
+          v-if="secondImage"
+          :src="require(`../assets/${secondImage}`)"
+          alt=""
+        />
       </button>
     </div>
   </div>
 </template>
 <script>
 export default {
-  props: ["firstValue", "secondValue", "header"],
+  props: ["firstValue", "secondValue", "header", "firstImage", "secondImage"],
 };
 </script>
 <style scoped>
 .choose-popup {
-  width: 50vw;
-  background-color: rgb(118, 117, 118);
-
+  background-color: white;
   position: absolute;
   text-align: center;
   z-index: 10;
-  top: 5vh;
+  top: 10vh;
   padding: 2rem;
   border-radius: 20px;
 }
-.choose-popup button {
+.choose-button {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  gap: 4rem;
   font-size: x-large;
-  padding: 1rem 2rem;
-  background-color: blueviolet;
+  padding: 0 0 3rem 0;
+  background-color: #95e9ff;
   color: white;
-  border-radius: 10px;
+  border-radius: 20px;
+  position: relative;
+  border-bottom: 6px solid #3ecefe;
+  width: 40%;
 }
-.choose-popup button:hover {
-  transform: scale(1.1);
+.choose-popup span {
+  font-weight: bold;
+  width: 100%;
+  background-color: #3ecefe;
+  padding: 1rem;
+  border-radius: 20px 20px 0 0;
 }
-.choose-popup hr {
-  width: 2px;
-  height: 100%;
-}
+
 .button-container {
   display: flex;
   align-items: center;
@@ -53,25 +77,42 @@ export default {
 }
 .choose-popup h3 {
   font-size: xx-large;
+
+  padding: 2px 50px;
+  background-color: #a77dfe;
+  border-radius: 20px;
+  color: white;
+  margin: auto;
   margin-bottom: 2rem;
+  border-radius: 20px;
 }
+.no-image {
+  padding: 0;
+  border: none;
+}
+.no-image span {
+  border-radius: 30px;
+}
+
 @media only screen and (max-width: 950px) {
-  .choose-popup button {
-    font-size: 18px;
+  .choose-popup button span {
+    font-size: 16px;
   }
   .choose-popup {
-    width: 70vw;
+    width: min-content;
+  }
+  .choose-popup h3 {
+    font-size: 20px;
   }
 }
 @media only screen and (max-width: 500px) {
   .choose-popup {
     width: 90vw;
+    padding: 0.5rem;
   }
-  .choose-popup button {
-    padding: 1rem;
-  }
+
   .choose-popup h3 {
-    font-size: 24px;
+    font-size: 18px;
   }
 }
 </style>

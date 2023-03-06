@@ -7,12 +7,15 @@
       @choose="gameType = $event == 'first' ? 'singlePlayer' : 'multiPlayer'"
       header="How do you want to play?"
       firstValue="Single player"
+      firstImage="icons8-battle-48.png"
       secondValue="Multi Player"
+      secondImage="icons8-multiplayer-48.png"
     ></choose-popup>
-    <component v-if="gameType != null" :is="gameType"></component>
-    <button class="return" @click="gameType = null" v-if="gameType !== null">
-      Return to menu
-    </button>
+    <component
+      @refresh="gameType = null"
+      v-if="gameType != null"
+      :is="gameType"
+    ></component>
   </div>
 </template>
 <script>
@@ -34,6 +37,7 @@ body * {
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
 }
+
 button {
   background-color: transparent;
   border: none;
@@ -48,8 +52,19 @@ h1 {
 }
 
 /* stylings */
+body {
+  background: radial-gradient(circle, #a659fe 0%, #6f53fd 100%);
+}
+button:hover {
+  transform: scale(1.1);
+}
 .header {
   width: max-content;
+  background-color: #9f51fe;
+  border: 6px solid white;
+  border-radius: 20px;
+  padding: 4px 20px;
+  color: white;
 }
 .container {
   display: flex;
@@ -66,8 +81,8 @@ h1 {
 }
 
 .board-cell {
-  border: 2px solid #000;
-  width: 5vw;
+  border: 3px solid white;
+  width: 100px;
   aspect-ratio: 1/1;
   display: flex;
   align-items: center;
@@ -75,9 +90,10 @@ h1 {
   font-size: 4rem;
   font-weight: 600;
   cursor: pointer;
-  background-color: #c9f9fc;
-  border-radius: 5px;
-  color: #fbb500;
+  background-color: #4cdafe;
+  border-radius: 16px;
+  border-bottom: #08b9ff solid 6px;
+  color: white;
 }
 
 .score-board {
@@ -88,6 +104,7 @@ h1 {
   font-weight: 500;
   color: white;
 }
+
 .score-board strong {
   display: block;
   font-size: larger;
@@ -102,18 +119,48 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background-color: #fcd015;
+  background-color: #67eb00;
+  border-bottom: #4ec306 solid 6px;
   padding: 1rem;
-  border-radius: 10px;
+  border-radius: 20px;
+}
+.top-container hr {
+  background-color: white;
+  width: 6px;
+  border: none;
+  border-radius: 30px;
+}
+.player-stats {
+  position: relative;
 }
 .gameOver {
-  background-color: #648083;
+  background-color: #0896cf;
 }
 .return {
-  background-color: #648083;
+  background-color: #fc8aff;
   color: white;
+  border: 2px solid white;
   padding: 1rem 2rem;
-  border-radius: 8px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: medium;
+  border-bottom: #da57f0 solid 6px;
+}
+@keyframes lineH {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+.player-bar {
+  width: 100%;
+  background: white;
+  height: 5px;
+  border-radius: 20px;
+  margin-top: 2px;
+  animation: lineH 0.2s linear;
 }
 @media only screen and (max-width: 950px) {
   .board-cell {
